@@ -23,7 +23,7 @@ export class UserService {
 
       const hashedPassword = await hashPassword(password)
    
-      const response = await prisma.user.create({
+      const user = await prisma.user.create({
         data: {
           name, 
           email,
@@ -31,7 +31,13 @@ export class UserService {
         }
       })
 
-      return response
+      const token = jwt.sign(
+        {userId: user.id, email: user.email},
+        process.env.JWT_SECRET as string,
+        {expiresIn: '5h'}
+      )
+
+      return token
     } catch (error: any) {
       throw {
         message : error.message
@@ -63,13 +69,22 @@ export class UserService {
         throw { message : "Email ou senha inválidos"}
       }
 
+      const sendUser = {
+        userId: user.id,
+        userName: user.name,
+        userEmail: user.email
+      }
+
       const token = jwt.sign(
         {userId: user.id, email: user.email},
         process.env.JWT_SECRET as string,
         {expiresIn: '5h'}
       )
 
-      return token
+      return {
+        token,
+        sendUser
+      }
     } catch (error: any) {
       throw {message : error.message}
     }

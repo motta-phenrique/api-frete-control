@@ -13,4 +13,34 @@ model User {
   name String
   email String @unique
   password String
+  freight Freight[]
+}
+
+model Freight {
+  id String @id @default(uuid())
+  client String
+  value Decimal
+  destination String
+  starting String
+  date DateTime
+  status Status @default(PENDING)
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  expenses    Expenses[]
+}
+
+model Expenses {
+  id String @id @default(uuid())
+  name String
+  value Decimal
+  createdAt DateTime @default(now())
+  freightId String
+  freight Freight @relation(fields: [freightId], references: [id])
+}
+
+enum Status {
+  PENDING 
+  ACTIVATE 
+  FINISHED
 }

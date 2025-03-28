@@ -41,17 +41,19 @@ export class UserController {
     const { email, password } = request.body;
 
     try {
-      const token = await this.userService.loginUser(email, password);
+      const data = await this.userService.loginUser(email, password);
 
-      if (!token) {
+      if (!data.token || !data.sendUser) {
         response.status(400).send({
           message: "erro ao gerar token",
         });
         return
       }
 
+      const { sendUser, token } = data
+
       response.status(200).send({
-        token,
+        sendUser, token
       });
     } catch (error: any) {
       switch (error.message) {
