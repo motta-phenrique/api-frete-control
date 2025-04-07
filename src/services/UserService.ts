@@ -31,13 +31,7 @@ export class UserService {
         }
       })
 
-      const token = jwt.sign(
-        {userId: user.id, email: user.email},
-        process.env.JWT_SECRET as string,
-        {expiresIn: '5h'}
-      )
-
-      return token
+      return user
     } catch (error: any) {
       throw {
         message : error.message

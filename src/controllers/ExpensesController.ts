@@ -46,7 +46,6 @@ export class ExpensesController {
 
   deleteExpenses = async (request: Request, response: Response) => {
     const { id } = request.body;
-    console.log(id)
     try {
       const data = await this.expensesServices.deleteExpenses(id);
 

@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
 import { FreightService } from "../services/FreightService";
+import { JwtPayload } from "jsonwebtoken";
+
+interface CustomRequest extends Request {
+  user?: JwtPayload | string;
+}
 
 export class FreightController {
   freightService: FreightService;
@@ -8,7 +13,7 @@ export class FreightController {
     this.freightService = freightService;
   }
 
-  getFreights = async (request: Request, response: Response) => {
+  getFreights = async (request: CustomRequest, response: Response) => {
     const { userId } = request.body
     try {
       const data = await this.freightService.getFreights(userId)
