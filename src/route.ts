@@ -2,7 +2,8 @@ import { Router } from "express"
 import { UserController } from "./controllers/UserController"
 import { FreightController } from "./controllers/FreightController"
 import { ExpensesController } from "./controllers/ExpensesController"
-
+import { authMiddleware } from "./middleware/middleware"
+ 
 export const router = Router()
 const userController = new UserController()
 const freightController = new FreightController()
@@ -14,15 +15,16 @@ router.post("/auth/create-user", userController.createUser)
 router.post("/auth/login", userController.loginUser)
 
 // Freight Routers
-router.get("/freight/get-freight", freightController.getFreights)
-router.get("/freight/get-one-freight", freightController.getOneFreight)
+router.get("/freight/get-freight",authMiddleware, freightController.getFreights)
+router.get("/freight/get-one-freight", authMiddleware, freightController.getOneFreight)
+router.get("/freight/get-freight-details", authMiddleware, freightController.getFreightDashboardDetails)
 
-router.post("/freight/create", freightController.createFreight)
-router.post("/freight/delete", freightController.deleteFreight)
+router.post("/freight/create", authMiddleware, freightController.createFreight)
+router.post("/freight/delete",authMiddleware, freightController.deleteFreight)
 
-router.patch("/freight/update", freightController.updateOneFreight)
-router.patch("/freight/update-status", freightController.updateFreightStatus)
+router.patch("/freight/update",authMiddleware, freightController.updateOneFreight)
+router.patch("/freight/update-status",authMiddleware, freightController.updateFreightStatus)
 
 // Expenses Routers
-router.post("/expenses/create", expensesController.createExpenses)
-router.delete("/expenses/delete", expensesController.deleteExpenses)
+router.post("/expenses/create", authMiddleware, expensesController.createExpenses)
+router.delete("/expenses/delete",authMiddleware, expensesController.deleteExpenses)

@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { FreightService } from "../services/FreightService";
 import { JwtPayload } from "jsonwebtoken";
+import { AuthPayload } from "../middleware/middleware";
 
 interface CustomRequest extends Request {
-  user?: JwtPayload | string;
+  user?: AuthPayload
 }
 
 export class FreightController {
@@ -14,9 +15,10 @@ export class FreightController {
   }
 
   getFreights = async (request: CustomRequest, response: Response) => {
-    const { userId } = request.body
+    const { user } = request
+
     try {
-      const data = await this.freightService.getFreights(userId)
+      const data = await this.freightService.getFreights(user?.userId as string)
 
       response.status(200).send(data)
     } catch (error: any) {
@@ -179,6 +181,30 @@ export class FreightController {
     } catch (error: any) {
       switch (error.message) {
         case "Todos os campos são obrigatórios":
+          response.status(400).send({
+            message: error.message,
+          });
+          return;
+
+        default:
+          response.status(500).send({
+            message: "Erro de servidor",
+          });
+          return;
+      }
+    }
+  }
+
+
+  getFreightDashboardDetails = async(request: CustomRequest, response: Response) => {
+    const { user } = request
+    try {
+      const data = await this.freightService.getFreightDashboardDetails(user?.userId as string)
+
+      response.status(200).send(data)
+    } catch (error: any) {
+      switch (error.message) {
+        case "Id obrigatório":
           response.status(400).send({
             message: error.message,
           });

@@ -160,4 +160,46 @@ export class FreightService {
       };
     }
   }
+
+  getFreightDashboardDetails = async (id: string) => {
+    try {
+      if (!id) {
+        throw { message: "Todos os campos são obrigatórios" };
+      }
+
+      const response = await prisma.freight.findMany({
+        where: {
+          userId: id
+        },
+        include: {
+          expenses: true
+        }
+      })
+      let profit = 0
+      let expenses = 0
+      let count = response.length
+      response.map((freight) => {
+        profit += Number(freight.value)
+
+        if(freight.expenses.length > 0){
+          freight.expenses.map((ex) => {
+            expenses += Number(ex.value) 
+          })
+        }
+      })
+
+      const data = {
+        profit: profit.toFixed(2),
+        expenses: expenses.toFixed(2),
+        liquid: (profit - expenses).toFixed(2),
+        count
+      }
+
+      return data 
+    } catch (error: any) {
+      throw {
+        message: error.message,
+      };
+    }
+  }
 }
