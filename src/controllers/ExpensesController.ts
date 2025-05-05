@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ExpensesService } from "../services/ExpensesServices";
+import { CustomRequest } from "./FreightController";
 
 export class ExpensesController {
   expensesServices: ExpensesService;
@@ -8,7 +9,7 @@ export class ExpensesController {
     this.expensesServices = expensesServices;
   }
 
-  createExpenses = async (request: Request, response: Response) => {
+  createExpenses = async (request: CustomRequest, response: Response) => {
     const { name, value, freightId } = request.body;
 
     try {

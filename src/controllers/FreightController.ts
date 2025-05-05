@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { FreightService } from "../services/FreightService";
-import { JwtPayload } from "jsonwebtoken";
 import { AuthPayload } from "../middleware/middleware";
 
-interface CustomRequest extends Request {
+export interface CustomRequest extends Request {
   user?: AuthPayload
 }
 
