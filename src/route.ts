@@ -13,6 +13,9 @@ const expensesController = new ExpensesController()
 // User Routers
 router.post("/auth/create-user", userController.createUser)
 router.post("/auth/login", userController.loginUser)
+router.post("/auth/reset-password", userController.recoveryPassword)
+router.post("/auth/verify-otp", userController.verifyOtp)
+router.post("/auth/create-new-password", userController.createNewPassword)
 
 // Freight Routers
 router.get("/freight/get-freight",authMiddleware, freightController.getFreights)

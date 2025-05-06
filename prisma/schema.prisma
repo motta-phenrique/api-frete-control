@@ -14,6 +14,7 @@ model User {
   email String @unique
   password String
   freight Freight[]
+  resetToken PasswordResetToken[]
 }
 
 model Freight {
@@ -37,6 +38,18 @@ model Expenses {
   createdAt DateTime @default(now())
   freightId String
   freight Freight @relation(fields: [freightId], references: [id])
+}
+
+model PasswordResetToken {
+  id String @id @default(uuid())
+  code String 
+  expireAt DateTime
+  userId String
+  validated Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 enum Status {
