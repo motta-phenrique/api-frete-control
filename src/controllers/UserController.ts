@@ -93,6 +93,7 @@ export class UserController {
   };
 
   verifyOtp = async (request: Request, response: Response) => {
+
     const { email, otp } = request.body;
 
     if (!email || !otp) {

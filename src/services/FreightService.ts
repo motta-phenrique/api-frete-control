@@ -4,18 +4,61 @@ import { Status } from "../types/types";
 export class FreightService {
   getFreights = async (id: string) => {
     try {
-      if(!id) {
-        throw {message : "Id obrigatório"}
+      if (!id) {
+        throw { message: "Id obrigatório" };
       }
 
       const data = await prisma.freight.findMany({
         where: {
-          userId: id
+          userId: id,
         },
         include: {
-          expenses: true
-        }
-      })
+          expenses: true,
+        },
+      });
+
+      return data;
+    } catch (error: any) {
+      throw {
+        message: error.message,
+      };
+    }
+  };
+
+  getOneFreight = async (id: string, userId: string) => {
+    try {
+      if (!userId || !id) {
+        throw { message: "Id obrigatório" };
+      }
+
+      const data = await prisma.freight.findUnique({
+        where: {
+          id,
+          userId,
+        },
+        include: {
+          expenses: true,
+        },
+      });
+
+      if (data) {
+        let expensesTotal = 0;
+
+        data.expenses.map((expenses) => {
+          expensesTotal += Number(expenses.value);
+        });
+
+        return {
+          client: data.client,
+          value: data.value,
+          date: data.date,
+          status: data.status,
+          starting: data.starting,
+          destination: data.destination,
+          expenses: data.expenses,
+          expensesTotal,
+        };
+      }
 
       return data
     } catch (error: any) {
@@ -23,31 +66,7 @@ export class FreightService {
         message: error.message,
       };
     }
-  }
-
-  getOneFreight = async (id: string, userId: string,) =>{
-    try {
-        if(!userId || !id){
-          throw {message : "Id obrigatório"}
-        }
-
-        const data = await prisma.freight.findUnique({
-          where: {
-            id,
-            userId
-          },
-          include: {
-            expenses: true
-          }
-        })
-
-        return data
-    } catch (error : any) {
-      throw {
-        message: error.message,
-      };
-    }
-  }
+  };
 
   createFreight = async (
     client: string,
@@ -93,7 +112,7 @@ export class FreightService {
         },
       });
 
-      return data
+      return data;
     } catch (error: any) {
       throw {
         message: error.message,
@@ -101,7 +120,15 @@ export class FreightService {
     }
   };
 
-  updadteFreight = async (id: string, userId: string, client: string, value: number, destination: string, starting: string, date: Date) => {
+  updadteFreight = async (
+    id: string,
+    userId: string,
+    client: string,
+    value: number,
+    destination: string,
+    starting: string,
+    date: Date
+  ) => {
     try {
       if (!id) {
         throw { message: "Id obrigatório" };
@@ -110,24 +137,24 @@ export class FreightService {
       const data = await prisma.freight.update({
         where: {
           id: id,
-          userId: userId
+          userId: userId,
         },
         data: {
           client,
           value,
           destination,
           starting,
-          date
-        }
-      })
+          date,
+        },
+      });
 
-      return data
-    } catch(error: any) {
+      return data;
+    } catch (error: any) {
       throw {
         message: error.message,
       };
     }
-  }
+  };
 
   updateFreightStatus = async (id: string, userId: string, status: Status) => {
     try {
@@ -135,31 +162,31 @@ export class FreightService {
         throw { message: "Todos os campos são obrigatórios" };
       }
 
-      let updateStatus: Status | null = null
+      let updateStatus: Status | null = null;
 
-      if(status === "PENDING"){
-        updateStatus = "ACTIVATE"
-      }else {
-        updateStatus = "FINISHED"
+      if (status === "PENDING") {
+        updateStatus = "ACTIVATE";
+      } else {
+        updateStatus = "FINISHED";
       }
 
       const data = await prisma.freight.update({
         where: {
           id: id,
-          userId: userId
+          userId: userId,
         },
         data: {
-          status: status === "PENDING" ? "ACTIVATE" : "FINISHED"
-        }
-      })
+          status: status === "PENDING" ? "ACTIVATE" : "FINISHED",
+        },
+      });
 
-      return data
-    }catch(error: any){
+      return data;
+    } catch (error: any) {
       throw {
         message: error.message,
       };
     }
-  }
+  };
 
   getFreightDashboardDetails = async (id: string) => {
     try {
@@ -169,37 +196,37 @@ export class FreightService {
 
       const response = await prisma.freight.findMany({
         where: {
-          userId: id
+          userId: id,
         },
         include: {
-          expenses: true
-        }
-      })
-      let profit = 0
-      let expenses = 0
-      let count = response.length
+          expenses: true,
+        },
+      });
+      let profit = 0;
+      let expenses = 0;
+      let count = response.length;
       response.map((freight) => {
-        profit += Number(freight.value)
+        profit += Number(freight.value);
 
-        if(freight.expenses.length > 0){
+        if (freight.expenses.length > 0) {
           freight.expenses.map((ex) => {
-            expenses += Number(ex.value) 
-          })
+            expenses += Number(ex.value);
+          });
         }
-      })
+      });
 
       const data = {
         profit: profit.toFixed(2),
         expenses: expenses.toFixed(2),
         liquid: (profit - expenses).toFixed(2),
-        count
-      }
+        count,
+      };
 
-      return data 
+      return data;
     } catch (error: any) {
       throw {
         message: error.message,
       };
     }
-  }
+  };
 }

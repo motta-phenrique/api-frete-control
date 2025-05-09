@@ -19,11 +19,11 @@ router.post("/auth/create-new-password", userController.createNewPassword)
 
 // Freight Routers
 router.get("/freight/get-freight",authMiddleware, freightController.getFreights)
-router.get("/freight/get-one-freight", authMiddleware, freightController.getOneFreight)
-router.get("/freight/get-freight-details", authMiddleware, freightController.getFreightDashboardDetails)
+router.get("/freight/dashboard", authMiddleware, freightController.getFreightDashboardDetails)
+router.get("/freight/:id", authMiddleware, freightController.getOneFreight)
 
 router.post("/freight/create", authMiddleware, freightController.createFreight)
-router.post("/freight/delete",authMiddleware, freightController.deleteFreight)
+router.delete("/freight/delete",authMiddleware, freightController.deleteFreight)
 
 router.patch("/freight/update",authMiddleware, freightController.updateOneFreight)
 router.patch("/freight/update-status",authMiddleware, freightController.updateFreightStatus)

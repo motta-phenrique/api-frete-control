@@ -37,10 +37,13 @@ export class FreightController {
     }
   }
 
-  getOneFreight = async (request: Request, response: Response) => {
-    const { id, userId } = request.body
+  getOneFreight = async (request: CustomRequest, response: Response) => {
+    const { user } = request
+    const { id } = request.params
     try {
-      const data = await this.freightService.getOneFreight(id, userId)
+      const data = await this.freightService.getOneFreight(id, user?.userId as string)
+
+      console.log(data)
 
       response.status(200).send(data)
     } catch (error: any) {
@@ -199,7 +202,7 @@ export class FreightController {
     const { user } = request
     try {
       const data = await this.freightService.getFreightDashboardDetails(user?.userId as string)
-
+      console.log(data)
       response.status(200).send(data)
     } catch (error: any) {
       switch (error.message) {
