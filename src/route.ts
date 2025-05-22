@@ -30,4 +30,4 @@ router.patch("/freight/update-status",authMiddleware, freightController.updateFr
 
 // Expenses Routers
 router.post("/expenses/create", authMiddleware, expensesController.createExpenses)
-router.delete("/expenses/delete",authMiddleware, expensesController.deleteExpenses)
+router.delete("/expenses/delete/:id",authMiddleware, expensesController.deleteExpenses)

@@ -43,8 +43,6 @@ export class FreightController {
     try {
       const data = await this.freightService.getOneFreight(id, user?.userId as string)
 
-      console.log(data)
-
       response.status(200).send(data)
     } catch (error: any) {
       switch (error.message) {
@@ -197,12 +195,10 @@ export class FreightController {
     }
   }
 
-
   getFreightDashboardDetails = async(request: CustomRequest, response: Response) => {
     const { user } = request
     try {
       const data = await this.freightService.getFreightDashboardDetails(user?.userId as string)
-      console.log(data)
       response.status(200).send(data)
     } catch (error: any) {
       switch (error.message) {

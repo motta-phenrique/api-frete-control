@@ -46,7 +46,7 @@ export class ExpensesController {
   };
 
   deleteExpenses = async (request: Request, response: Response) => {
-    const { id } = request.body;
+    const { id } = request.params
     try {
       const data = await this.expensesServices.deleteExpenses(id);
 
