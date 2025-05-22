@@ -60,7 +60,7 @@ export class FreightService {
         };
       }
 
-      return data
+      return data;
     } catch (error: any) {
       throw {
         message: error.message,
@@ -221,6 +221,29 @@ export class FreightService {
         liquid: (profit - expenses).toFixed(2),
         count,
       };
+
+      return data;
+    } catch (error: any) {
+      throw {
+        message: error.message,
+      };
+    }
+  };
+
+  cancelFreight = async (id: string) => {
+    try {
+      if (!id) {
+        throw { message: "Campos Obrigatórios" };
+      }
+
+      const data = await prisma.freight.update({
+        where: {
+          id: id,
+        },
+        data: {
+          status: "CANCELED",
+        },
+      });
 
       return data;
     } catch (error: any) {

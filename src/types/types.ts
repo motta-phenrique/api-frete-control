@@ -1,4 +1,4 @@
 
 import { JwtPayload } from "jsonwebtoken";
 
-export type Status = 'PENDING' | 'ACTIVATE' | 'FINISHED';
+export type Status = 'PENDING' | 'ACTIVATE' | 'FINISHED' | 'CANCELED';

@@ -3,7 +3,7 @@ import { FreightService } from "../services/FreightService";
 import { AuthPayload } from "../middleware/middleware";
 
 export interface CustomRequest extends Request {
-  user?: AuthPayload
+  user?: AuthPayload;
 }
 
 export class FreightController {
@@ -14,12 +14,14 @@ export class FreightController {
   }
 
   getFreights = async (request: CustomRequest, response: Response) => {
-    const { user } = request
+    const { user } = request;
 
     try {
-      const data = await this.freightService.getFreights(user?.userId as string)
+      const data = await this.freightService.getFreights(
+        user?.userId as string
+      );
 
-      response.status(200).send(data)
+      response.status(200).send(data);
     } catch (error: any) {
       switch (error.message) {
         case "Id obrigatório":
@@ -35,15 +37,18 @@ export class FreightController {
           return;
       }
     }
-  }
+  };
 
   getOneFreight = async (request: CustomRequest, response: Response) => {
-    const { user } = request
-    const { id } = request.params
+    const { user } = request;
+    const { id } = request.params;
     try {
-      const data = await this.freightService.getOneFreight(id, user?.userId as string)
+      const data = await this.freightService.getOneFreight(
+        id,
+        user?.userId as string
+      );
 
-      response.status(200).send(data)
+      response.status(200).send(data);
     } catch (error: any) {
       switch (error.message) {
         case "Id obrigatório":
@@ -59,7 +64,7 @@ export class FreightController {
           return;
       }
     }
-  }
+  };
 
   createFreight = async (request: Request, response: Response) => {
     const { client, value, date, starting, destination, userId } = request.body;
@@ -130,10 +135,19 @@ export class FreightController {
   };
 
   updateOneFreight = async (request: Request, response: Response) => {
-    const { id, userId, client, value, destination, starting, date } = request.body;
+    const { id, userId, client, value, destination, starting, date } =
+      request.body;
 
     try {
-      const data = await this.freightService.updadteFreight(id, userId, client, value, destination, starting, date);
+      const data = await this.freightService.updadteFreight(
+        id,
+        userId,
+        client,
+        value,
+        destination,
+        starting,
+        date
+      );
 
       if (!data) {
         response.status(400).send({
@@ -143,7 +157,7 @@ export class FreightController {
       }
 
       response.status(200).send({
-        data
+        data,
       });
     } catch (error: any) {
       switch (error.message) {
@@ -160,13 +174,17 @@ export class FreightController {
           return;
       }
     }
-  }
+  };
 
   updateFreightStatus = async (request: Request, response: Response) => {
-    const { id, userId, status } = request.body
+    const { id, userId, status } = request.body;
 
     try {
-      const data = await this.freightService.updateFreightStatus(id, userId, status)
+      const data = await this.freightService.updateFreightStatus(
+        id,
+        userId,
+        status
+      );
 
       if (!data) {
         response.status(400).send({
@@ -176,7 +194,7 @@ export class FreightController {
       }
 
       response.status(200).send({
-        data
+        data,
       });
     } catch (error: any) {
       switch (error.message) {
@@ -193,13 +211,18 @@ export class FreightController {
           return;
       }
     }
-  }
+  };
 
-  getFreightDashboardDetails = async(request: CustomRequest, response: Response) => {
-    const { user } = request
+  getFreightDashboardDetails = async (
+    request: CustomRequest,
+    response: Response
+  ) => {
+    const { user } = request;
     try {
-      const data = await this.freightService.getFreightDashboardDetails(user?.userId as string)
-      response.status(200).send(data)
+      const data = await this.freightService.getFreightDashboardDetails(
+        user?.userId as string
+      );
+      response.status(200).send(data);
     } catch (error: any) {
       switch (error.message) {
         case "Id obrigatório":
@@ -215,5 +238,19 @@ export class FreightController {
           return;
       }
     }
-  }
+  };
+
+  cancelFreight = async (request: CustomRequest, response: Response) => {
+    const { id } = request.body;
+
+    try {
+      const data = await this.freightService.cancelFreight(id);
+
+      response.status(200).send(data);
+    } catch (error) {
+      response.status(500).send({
+        message: "Erro de servidor",
+      });
+    }
+  };
 }

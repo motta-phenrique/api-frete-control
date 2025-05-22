@@ -56,4 +56,5 @@ enum Status {
   PENDING 
   ACTIVATE 
   FINISHED
+  CANCELED
 }
